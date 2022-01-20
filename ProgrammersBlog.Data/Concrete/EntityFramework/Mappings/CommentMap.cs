@@ -28,32 +28,32 @@ namespace ProgrammersBlog.Data.Concrete.EntityFramework.Mappings
             builder.Property(c => c.Note).HasMaxLength(500);
             builder.HasOne<Article>(c => c.Article).WithMany(a => a.Comments).HasForeignKey(c => c.ArticleId);
             builder.ToTable("Comments");
-            builder.HasData(new Comment
-            {
-                Id=1,
-                ArticleId=1,
-                Text="olur olur test ",
-                IsActive = true,
-                IsDeleted = false,
-                CreatedByName = "InitialCreate",
-                CreatedDate = DateTime.Now,
-                ModifiedByName = "InitialCreate",
-                ModifiedDate = DateTime.Now,
-                Note = "test data",
-            },
-            new Comment
-            {
-                Id = 2,
-                ArticleId = 2,
-                Text = "olur olur test ",
-                IsActive = true,
-                IsDeleted = false,
-                CreatedByName = "InitialCreate",
-                CreatedDate = DateTime.Now,
-                ModifiedByName = "InitialCreate",
-                ModifiedDate = DateTime.Now,
-                Note = "test data",
-            });
+            //builder.HasData(new Comment
+            //{
+            //    Id=1,
+            //    ArticleId=1,
+            //    Text="olur olur test ",
+            //    IsActive = true,
+            //    IsDeleted = false,
+            //    CreatedByName = "InitialCreate",
+            //    CreatedDate = DateTime.Now,
+            //    ModifiedByName = "InitialCreate",
+            //    ModifiedDate = DateTime.Now,
+            //    Note = "test data",
+            //},
+            //new Comment
+            //{
+            //    Id = 2,
+            //    ArticleId = 2,
+            //    Text = "olur olur test ",
+            //    IsActive = true,
+            //    IsDeleted = false,
+            //    CreatedByName = "InitialCreate",
+            //    CreatedDate = DateTime.Now,
+            //    ModifiedByName = "InitialCreate",
+            //    ModifiedDate = DateTime.Now,
+            //    Note = "test data",
+            //});
         }
     }
 }

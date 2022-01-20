@@ -11,9 +11,6 @@ namespace ProgrammersBlog.Data.Abstract
         IArticleRepository Articles { get; }
         ICategoryRepository Categorires { get; }
         ICommentRepository Comments { get;}
-        IRoleRepository Roles { get; }
-        IUserRepository Users { get; }
-
-        Task<int> SaveAsync();
+              Task<int> SaveAsync();
     }
 }

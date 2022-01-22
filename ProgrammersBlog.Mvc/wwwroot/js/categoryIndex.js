@@ -22,7 +22,7 @@ $(document).ready(function () {
                 action: function (e, dt, node, config) {
                     $.ajax({
                         type: 'GET',
-                        url: '/Admin/CategoryController/GetAllCategories/',
+                        url: '/Admin/Category/GetAllCategories/',
                         contentType: "application/json",
                         beforeSend: function () {
                             $('#categoriesTable').hide();

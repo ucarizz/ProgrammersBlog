@@ -1,6 +1,6 @@
 ﻿
 $(document).ready(function () {
-    $('#usersTable').DataTable({
+    const dataTable = $('#usersTable').DataTable({
         dom:
             "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -22,41 +22,37 @@ $(document).ready(function () {
                 action: function (e, dt, node, config) {
                     $.ajax({
                         type: 'GET',
-                        url: '/Admin/UserController/GetAllCategories/',
+                        url: '/Admin/User/GetAllUsers/',
                         contentType: "application/json",
                         beforeSend: function () {
-                            $('#categoriesTable').hide();
+                            $('#usersTable').hide();
 
                             $('.spinner-border').show();
                         },
                         success: function (data) {
-                            const categoryListDto = jQuery.parseJSON(data);
-                            console.log(categoryListDto);
-                            if (categoryListDto.ResultStatus === 0) {
+                            const userListDto = jQuery.parseJSON(data);
+                            dataTable.clear();
+                            console.log(userListDto);
+                            if (userListDto.ResultStatus === 0) {
                                 let tableBody = "";
-                                $.each(categoryListDto.Categories.$values, function (index, category) {
-                                    tableBody += `
-                                                <tr>
-                                                     <td> ${category.Id}</td>
-                                                     <td> ${category.Name}</td>
-                                                     <td> ${category.Description}</td>
-                                                     <td> ${category.IsActive}</td>
-                                                     <td> ${category.IsDeleted}</td>
-                                                     <td> ${category.Note}</td>
-                                                     <td> ${category.CreatedDate}</td>
-                                                     <td> ${category.CreatedByName}</td>
-                                                     <td> ${category.ModifiedDate}</td>
-                                                     <td> ${category.ModifiedByName}</td>
-                                                     <td>
-                                    <button class="btn btn-primary btn-sm btn-block btn-update" data-id="${category.Id}"><span class="fas fa-edit"></span></button>
-                                    <button class="btn btn-danger btn-sm btn-block btn-delete" data-id="${category.Id}"><span class="fas fa-minus-circle"></span></button>
-                                </td>
-                                               </tr>`
+                                $.each(userListDto.Users.$values, function (index, user) {
+                                    dataTable.row.add([
+                                        user.Id,
+                                        user.UserName,
+                                        user.Email,
+                                        user.PhoneNumber,
+                                        `<img src="/img/${user.Picture}" alt="${user.UserName}" style="max-height:50px; max-width:50px;"/>`,
+                                        `<button class="btn btn-primary btn-sm btn-block btn-update" data-id="${user.Id}"><span class="fas fa-edit"></span></button>
+                                    <button class="btn btn-danger btn-sm btn-block btn-delete" data-id="${user.Id}"><span class="fas fa-minus-circle"></span></button>
+`
+
+
+                                    ]);
                                 });
 
-                                $('#categoriesTable > tbody ').replaceWith(tableBody);
+                                dataTable.draw();
                                 $('.spinner-border').hide();
-                                $('#categoriesTable').fadeIn(1400);
+                                $('#usersTable').fadeIn(1400);
 
 
                             } else {
@@ -66,9 +62,9 @@ $(document).ready(function () {
                             }
                         },
                         error: function (err) {
-                            console.log(err)
+                            console.log('err', err)
                             $('.spinner-border').hide();
-                            $('#categoriesTable').fadeIn(1000);
+                            $('#usersTable').fadeIn(1000);
                             toastr.error(`${err.responseText}`, 'Hata!');
 
                         }
@@ -298,63 +294,47 @@ $(document).ready(function () {
 
         placeHolderDiv.on('click', '#btnSave', function (event) {
             event.preventDefault();
-            const form = $('#form-category-add');
+            const form = $('#form-user-add');
             const actionUrl = form.attr('action');
-            const dataToSend = form.serialize();
-            console.log('actionUrl', actionUrl);
-            $.post(actionUrl, dataToSend).done(function (data) {
-                // console.log(data);
-                const categoryAddAjaxModel = jQuery.parseJSON(data);
-                console.log(categoryAddAjaxModel);
+            const dataToSend = new FormData(form.get(0));
+            $.ajax({
+                url: actionUrl,
+                type: 'POST',
+                data: dataToSend,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+
+                    const userAddAjaxModel = jQuery.parseJSON(data);
+
+                    const newFormBody = $('.modal-body', userAddAjaxModel.UserAddPartial);
+                    placeHolderDiv.find('.modal-body').replaceWith(newFormBody);
+                    const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
 
 
-                const newFormBody = $('.modal-body', categoryAddAjaxModel.CategoryAddPartial);
-                placeHolderDiv.find('.modal-body').replaceWith(newFormBody);
-                const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
+                    if (isValid) {
 
-
-                if (isValid) {
-                   
-                    placeHolderDiv.find('.modal').modal('hide');
-                    const newTableRow = `
-
-    <tr name="${categoryUpdateAjaxModel.CategoryDto.Category.Id}">
-        <td>${categoryAddAjaxModel.CategoryDto.Category.Id}</td>
-        <td>${categoryAddAjaxModel.CategoryDto.Category.Name}</td>
-        <td>${categoryAddAjaxModel.CategoryDto.Category.Description}</td>
-        <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsActive.toString())}</td>
-        <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsDeleted.toString())}</td>
-        <td>${categoryAddAjaxModel.CategoryDto.Category.Note}</td>
-        <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.CreatedDate)}</td>
-        <td>${categoryAddAjaxModel.CategoryDto.Category.CreatedByName}</td>
-        <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.ModifiedDate)}</td>
-        <td>${categoryAddAjaxModel.CategoryDto.Category.ModifiedByName}</td>
-        <td>
-             <button class="btn btn-primary btn-sm btn-block btn-update" data-id="${categoryAddAjaxModel.CategoryDto.Category.Id}"><span class="fas fa-edit"></span></button>
-             <button class="btn btn-danger btn-sm btn-block btn-delete" data-id="${categoryAddAjaxModel.CategoryDto.Category.Id}"><span class="fas fa-minus-circle"></span></button>
-        </td>
-    </tr>`;
-
-
-                    const newTableRowObject = $(newTableRow);
-
-
-                    newTableRowObject.hide();
-                    $('#categoriesTable').append(newTableRowObject);
-                    newTableRowObject.fadeIn(1400);
-
-                    toastr.success(`${categoryAddAjaxModel.CategoryDto.Message}`, 'Başarılı işlem');
-                } else {
-                    let summaryText = "";
-                    $('#validation-summary > ul > li').each(function () {
-                        let text = $(this).text;
-                        summaryText = `*${text}\n`;
-                    });
-                    console.log(summaryText);
-
-                    toastr.warning(summaryText);
-                }
-
+                        placeHolderDiv.find('.modal').modal('hide');
+                        dataTable.row.add([
+                            userAddAjaxModel.UserDto.User.Id,
+                            userAddAjaxModel.UserDto.User.UserName,
+                            userAddAjaxModel.UserDto.User.Email,
+                            userAddAjaxModel.UserDto.User.PhoneNumber,
+                            `<img src="/img/${userAddAjaxModel.UserDto.User.Picture}" alt="${userAddAjaxModel.UserDto.User.UserName}" style="max-height:50px; max-width:50px;"/>`,
+                            `       <button class="btn btn-primary btn-sm btn-block btn-update" data-id="${userAddAjaxModel.UserDto.User.Id}"><span class="fas fa-edit"></span></button>
+                                    <button class="btn btn-danger btn-sm btn-block btn-delete" data-id="${userAddAjaxModel.UserDto.User.Id}"><span class="fas fa-minus-circle"></span></button>`
+                        ]).draw();
+                        toastr.success('test', 'Başarılı işlem');
+                    } else {
+                        let summaryText = "";
+                        $('#validation-summary > ul > li').each(function () {
+                            let text = $(this).text;
+                            summaryText = `*${text}\n`;
+                        });
+                        toastr.warning(summaryText);
+                    }
+                },
+                error: function (err) { console.log(err); }
             });
         });
     });
@@ -364,10 +344,10 @@ $(document).ready(function () {
         event.preventDefault();
         const id = $(this).attr('data-id');
         const tableRow = $(`[name = "${id}"]`);
-        const categoryName = tableRow.find('td:eq(1)').text();
+        const userName = tableRow.find('td:eq(1)').text();
         Swal.fire({
             title: 'Silmek istediğinize emin misiniz?',
-            text: `${categoryName} Seçili kategori silinecektir!`,
+            text: `${userName} Seçili kategori silinecektir!`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -378,22 +358,22 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    data: { categoryId: id },
-                    url: '/Admin/Category/Delete/',
+                    data: { userId: id },
+                    url: '/Admin/User/Delete/',
                     success: function (data) {
-                        const categoryDto = jQuery.parseJSON(data);
-                        if (categoryDto.ResultStatus === 0) {
+                        const userDto = jQuery.parseJSON(data);
+                        if (userDto.ResultStatus === 0) {
                             Swal.fire(
                                 'Silindi!',
-                                `${categoryDto.Category.Name} adlı kategori başarıyla silinmiştir.`,
+                                `${userDto.User.UserName} adlı kullanıcı başarıyla silinmiştir.`,
                                 'başarılı'
                             );
-                            tableRow.fadeOut(3500);
+                            dataTable.row(tableRow).remove().draw();
                         } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Bir hata oluştu...',
-                                text: `${categoryDto.Message}`
+                                text: `${userDto.Message}`
                             })
                         }
                     },
@@ -469,7 +449,7 @@ $(document).ready(function () {
                     newTableRowObject.hide();
                     categoryTableRow.replaceWith(newTableRowObject);
                     newTableRowObject.fadeIn(1000);
-                    toastr.success(`${categoryAddAjaxModel.CategoryDto.Message}`, 'Başarılı güncelleme işlemi');
+                    toastr.success(`${userAddAjaxModel.CategoryDto.Message}`, 'Başarılı güncelleme işlemi');
                 } else {
                     let summaryText = "";
                     $('#validation-summary > ul > li').each(function () {
@@ -484,7 +464,7 @@ $(document).ready(function () {
                 console.log(response);
             })
 
-            })
+        })
 
     });
 

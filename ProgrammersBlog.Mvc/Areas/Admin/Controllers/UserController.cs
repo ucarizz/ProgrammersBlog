@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
@@ -31,7 +32,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             _mapper = mapper;
         }
 
-        [Area("Admin")]
+
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -41,6 +42,20 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                 ResultStatus = ResultStatus.Success
             }
                 );
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var userListDto = JsonSerializer.Serialize(new UserListDto
+            {
+                Users = users,
+                ResultStatus = ResultStatus.Success
+
+            }, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve });
+
+            return Json(userListDto);
         }
 
         [HttpGet]
@@ -96,6 +111,35 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             return Json(userAddAjaxModelStateErrorModel);
 
 
+        }
+
+        public async Task<JsonResult> Delete(int userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                var deletedUSer = JsonSerializer.Serialize(new UserDto { ResultStatus=ResultStatus.Success,
+                Message=$"{user.UserName} adlu kullanıcı adına sahip kullanıcı başarıyla silinmiştir.",
+                User=user});
+                return Json(deletedUSer);
+            }
+            else
+            {
+                string errorMessages = String.Empty;
+                foreach (var error in result.Errors)
+                {
+                    errorMessages = $"- {error.Description}\n";
+
+                }
+                var deletedUsedErrorModel = JsonSerializer.Serialize(new UserDto
+                {
+                    ResultStatus = ResultStatus.Error,
+                    Message = $"{user.UserName} adlı kullanıcı adına sahip kullanıcı sinirken bazı hatalar oluştu.\n {errorMessages}",
+                    User=user
+                });
+                return Json(deletedUsedErrorModel);
+            }
         }
 
         public async Task<string> ImageUpload(UserAddDto userAddDto)

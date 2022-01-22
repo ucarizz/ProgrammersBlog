@@ -17,7 +17,7 @@ namespace ProgrammersBlog.Data.Concrete.EntityFramework.Mappings
             builder.HasKey(r => r.Id);
 
             // Index for "normalized" role name to allow efficient lookups
-            builder.HasIndex(r => r.NormalizedName).HasDatabaseName("RoleNameIndex").IsUnique();
+            builder.HasIndex(r => r.NormalizedName).HasName("RoleNameIndex").IsUnique();
 
             // Maps to the AspNetRoles table
             builder.ToTable("AspNetRoles");
@@ -26,8 +26,8 @@ namespace ProgrammersBlog.Data.Concrete.EntityFramework.Mappings
             builder.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
 
             // Limit the size of columns to use efficient database types
-            builder.Property(u => u.Name).HasMaxLength(100);
-            builder.Property(u => u.NormalizedName).HasMaxLength(100);
+            builder.Property(u => u.Name).HasMaxLength(256);
+            builder.Property(u => u.NormalizedName).HasMaxLength(256);
 
             // The relationships between Role and other entity types
             // Note that these relationships are configured with no navigation properties

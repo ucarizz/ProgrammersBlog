@@ -13,8 +13,8 @@ namespace ProgrammersBlog.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -249,17 +249,17 @@ namespace ProgrammersBlog.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "CreatedByName", "CreatedDate", "Description", "IsActive", "IsDeleted", "ModifiedByName", "ModifiedDate", "Name", "Note" },
-                values: new object[] { 1, "InitialCreate", new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(7141), "C# Unutulanlar", true, false, "InitialCreate", new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(7862), "C#", "test data" });
+                values: new object[] { 1, "InitialCreate", new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(5208), "C# Unutulanlar", true, false, "InitialCreate", new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(5872), "C#", "test data" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "CreatedByName", "CreatedDate", "Description", "IsActive", "IsDeleted", "ModifiedByName", "ModifiedDate", "Name", "Note" },
-                values: new object[] { 2, "InitialCreate", new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(8529), "java idesizlik", true, false, "InitialCreate", new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(8530), "java", "test data" });
+                values: new object[] { 2, "InitialCreate", new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(6525), "java idesizlik", true, false, "InitialCreate", new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(6526), "java", "test data" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "CreatedByName", "CreatedDate", "Description", "IsActive", "IsDeleted", "ModifiedByName", "ModifiedDate", "Name", "Note" },
-                values: new object[] { 3, "InitialCreate", new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(8534), "olur mu be", true, false, "InitialCreate", new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(8535), "golang", "test data" });
+                values: new object[] { 3, "InitialCreate", new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(6530), "olur mu be", true, false, "InitialCreate", new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(6531), "golang", "test data" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Articles_CategoryId",

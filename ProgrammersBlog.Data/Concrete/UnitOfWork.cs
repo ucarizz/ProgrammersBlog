@@ -15,7 +15,7 @@ namespace ProgrammersBlog.Data.Concrete
         private EfArticleRepository _articleRepository;
         private EfCategoryRepository _categoryRepository;
         private EfCommentRepository _commentRepository;
-    
+      
 
         public UnitOfWork(ProgrammersBlogContext context)
         {
@@ -27,6 +27,7 @@ namespace ProgrammersBlog.Data.Concrete
         public ICategoryRepository Categorires => _categoryRepository ?? new EfCategoryRepository(_context);
 
         public ICommentRepository Comments => _commentRepository ?? new EfCommentRepository(_context);
+ 
 
         public async ValueTask DisposeAsync()
         {

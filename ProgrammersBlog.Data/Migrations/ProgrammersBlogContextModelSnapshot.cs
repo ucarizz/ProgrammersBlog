@@ -156,12 +156,12 @@ namespace ProgrammersBlog.Data.Migrations
                         {
                             Id = 1,
                             CreatedByName = "InitialCreate",
-                            CreatedDate = new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(7141),
+                            CreatedDate = new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(5208),
                             Description = "C# Unutulanlar",
                             IsActive = true,
                             IsDeleted = false,
                             ModifiedByName = "InitialCreate",
-                            ModifiedDate = new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(7862),
+                            ModifiedDate = new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(5872),
                             Name = "C#",
                             Note = "test data"
                         },
@@ -169,12 +169,12 @@ namespace ProgrammersBlog.Data.Migrations
                         {
                             Id = 2,
                             CreatedByName = "InitialCreate",
-                            CreatedDate = new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(8529),
+                            CreatedDate = new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(6525),
                             Description = "java idesizlik",
                             IsActive = true,
                             IsDeleted = false,
                             ModifiedByName = "InitialCreate",
-                            ModifiedDate = new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(8530),
+                            ModifiedDate = new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(6526),
                             Name = "java",
                             Note = "test data"
                         },
@@ -182,12 +182,12 @@ namespace ProgrammersBlog.Data.Migrations
                         {
                             Id = 3,
                             CreatedByName = "InitialCreate",
-                            CreatedDate = new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(8534),
+                            CreatedDate = new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(6530),
                             Description = "olur mu be",
                             IsActive = true,
                             IsDeleted = false,
                             ModifiedByName = "InitialCreate",
-                            ModifiedDate = new DateTime(2022, 1, 19, 22, 30, 58, 977, DateTimeKind.Local).AddTicks(8535),
+                            ModifiedDate = new DateTime(2022, 1, 20, 23, 28, 29, 646, DateTimeKind.Local).AddTicks(6531),
                             Name = "golang",
                             Note = "test data"
                         });
@@ -253,12 +253,12 @@ namespace ProgrammersBlog.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
